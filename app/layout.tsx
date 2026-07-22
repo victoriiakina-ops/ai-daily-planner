@@ -4,7 +4,6 @@ import "./globals.css";
 import { TasksProvider } from "@/context/TasksProvider";
 import { SheetProvider } from "@/context/SheetProvider";
 import { TaskComposerSheet } from "@/components/TaskComposerSheet";
-import { DebugOverlay } from "@/components/DebugOverlay";
 
 const onest = Onest({
   subsets: ["latin", "cyrillic"],
@@ -46,7 +45,6 @@ export default function RootLayout({
               {children}
             </div>
             <TaskComposerSheet />
-            <DebugOverlay />
           </SheetProvider>
         </TasksProvider>
       </body>
