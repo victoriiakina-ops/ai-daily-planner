@@ -70,7 +70,7 @@ export function OnboardingCarousel() {
       {/* Fixed-height, top-aligned box so every preview card starts at the same
           position and everything below (heading, body) lands at the same height
           regardless of how tall that slide's card happens to be. */}
-      <div className="mt-10 flex h-[196px] items-start justify-center">
+      <div className="mt-[68px] flex h-[196px] items-start justify-center">
         <Preview />
       </div>
 
