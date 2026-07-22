@@ -11,9 +11,20 @@ function isToday(date?: string): boolean {
   return date !== undefined && date === todayIsoDate();
 }
 
+// DEBUG: module-scope counter, survives across remounts within the same JS session
+// (unlike component state, which resets on remount). If this ever exceeds 1 during
+// a session without a hard page reload, TasksProvider mounted more than once.
+let debugMountCount = 0;
+
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  // DEBUG: a fresh id per mount of this hook. If this value ever changes without a
+  // full page reload, TasksProvider remounted (a fresh instance, fresh in-memory
+  // state) rather than staying alive across navigation as intended.
+  const [instanceId] = useState(() => Math.random().toString(36).slice(2, 8));
+  const [mountedAt] = useState(() => new Date().toISOString());
+  const [mountNumber] = useState(() => ++debugMountCount);
 
   // Load from LocalStorage once, on mount. This must run in an effect (not a lazy
   // initializer) because LocalStorage is unavailable during server-side rendering.
@@ -180,6 +191,9 @@ export function useTasks() {
   return {
     tasks,
     isLoaded,
+    instanceId,
+    mountedAt,
+    mountNumber,
     createTask,
     createTasksFromDrafts,
     updateTask,
