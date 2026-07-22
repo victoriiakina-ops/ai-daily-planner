@@ -67,25 +67,29 @@ export function OnboardingCarousel() {
         <span className="text-[19px] font-semibold tracking-tight">Focus</span>
       </div>
 
-      {/* Fixed-height, top-aligned box so every preview card starts at the same
-          position and everything below (heading, body) lands at the same height
-          regardless of how tall that slide's card happens to be. */}
-      <div className="mt-[68px] flex h-[196px] items-start justify-center">
-        <Preview />
+      {/* The card+text group is vertically centered in the space between the header
+          and the bottom controls, so it feels balanced regardless of card height —
+          rather than anchored to a fixed offset from the top. */}
+      <div className="flex flex-1 flex-col items-center justify-center">
+        {/* Fixed-height, bottom-aligned box: every card's bottom edge (and so its
+            gap to the heading) lands in the same place, so the gap stays small and
+            consistent even though the three preview cards are very different heights
+            (68px / 209px / 186px). */}
+        <div className="flex h-[210px] w-full items-end justify-center">
+          <Preview />
+        </div>
+
+        <div className="mt-5 w-full">
+          <h1 className="text-[22px] font-semibold leading-snug text-dark-surface-foreground">
+            {copy.title}
+          </h1>
+          <p className="mt-2 text-[14px] leading-relaxed text-dark-surface-muted">
+            {copy.body}
+          </p>
+        </div>
       </div>
 
-      <div className="mt-8">
-        <h1 className="text-[22px] font-semibold leading-snug text-dark-surface-foreground">
-          {copy.title}
-        </h1>
-        <p className="mt-2 text-[14px] leading-relaxed text-dark-surface-muted">
-          {copy.body}
-        </p>
-      </div>
-
-      {/* Pushed to the bottom regardless of text length, so the button (when present)
-          and the pagination dots below it stay anchored to the same place. */}
-      <div className="mt-auto flex flex-col items-center gap-4 pt-8">
+      <div className="flex flex-col items-center gap-4 pb-2">
         {isLast && (
           <button
             type="button"
