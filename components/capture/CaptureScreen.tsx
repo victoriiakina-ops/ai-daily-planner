@@ -1,16 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { t } from "@/lib/i18n";
 import { MicIcon } from "@/components/icons";
 import { useCaptureDraftContext } from "@/context/CaptureDraftProvider";
+import { useSpeechInput } from "@/hooks/useSpeechInput";
 import { ProcessingOverlay } from "@/components/capture/ProcessingOverlay";
 
 export function CaptureScreen() {
   const router = useRouter();
   const { phase, submitCapture, confirmDrafts } = useCaptureDraftContext();
   const [text, setText] = useState("");
+
+  const handleSpeechResult = useCallback((transcript: string) => {
+    setText((prev) => (prev.trim().length > 0 ? `${prev.trim()}\n${transcript}` : transcript));
+  }, []);
+  const { isSupported: isVoiceSupported, isListening, start, stop } = useSpeechInput({
+    onResult: handleSpeechResult,
+  });
 
   const isProcessing = phase === "processing" || phase === "done";
 
@@ -45,7 +53,12 @@ export function CaptureScreen() {
         <button
           type="button"
           aria-label={t.a11y.voiceInput}
-          className="absolute bottom-4 right-4 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-dark-surface shadow-[0_4px_12px_rgba(244,156,152,0.4)] transition-transform active:scale-95"
+          aria-pressed={isListening}
+          disabled={!isVoiceSupported}
+          onClick={isListening ? stop : start}
+          className={`absolute bottom-4 right-4 flex h-11 w-11 items-center justify-center rounded-full text-dark-surface shadow-[0_4px_12px_rgba(244,156,152,0.4)] transition-transform active:scale-95 disabled:opacity-40 disabled:shadow-none ${
+            isListening ? "bg-accent animate-pulse" : "bg-accent"
+          }`}
         >
           <MicIcon className="h-5 w-5" />
         </button>
