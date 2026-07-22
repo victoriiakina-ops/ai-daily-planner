@@ -67,11 +67,14 @@ export function OnboardingCarousel() {
         <span className="text-[19px] font-semibold tracking-tight">Focus</span>
       </div>
 
-      <div className="flex flex-1 items-center justify-center py-8">
+      {/* Fixed-height, top-aligned box so every preview card starts at the same
+          position and everything below (heading, body) lands at the same height
+          regardless of how tall that slide's card happens to be. */}
+      <div className="mt-10 flex h-[196px] items-start justify-center">
         <Preview />
       </div>
 
-      <div>
+      <div className="mt-8">
         <h1 className="text-[22px] font-semibold leading-snug text-dark-surface-foreground">
           {copy.title}
         </h1>
@@ -80,29 +83,33 @@ export function OnboardingCarousel() {
         </p>
       </div>
 
-      <div className="flex items-center justify-center gap-1.5 pb-2 pt-8">
-        {SLIDES.map((slide, i) => (
-          <span
-            key={slide.key}
-            className={`h-1.5 rounded-full bg-dark-surface-foreground transition-all duration-200 ${
-              i === index ? "w-6 opacity-100" : "w-1.5 opacity-40"
-            }`}
-          />
-        ))}
-      </div>
+      {/* Pushed to the bottom regardless of text length, so the button (when present)
+          and the pagination dots below it stay anchored to the same place. */}
+      <div className="mt-auto flex flex-col items-center gap-4 pt-8">
+        {isLast && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleStart();
+            }}
+            className="flex h-12 w-full items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-dark-surface transition-transform duration-150 active:scale-[0.98]"
+          >
+            {t.onboarding.start}
+          </button>
+        )}
 
-      {isLast && (
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleStart();
-          }}
-          className="mt-2 flex h-12 w-full items-center justify-center rounded-full bg-accent text-[16px] font-semibold text-dark-surface transition-transform duration-150 active:scale-[0.98]"
-        >
-          {t.onboarding.start}
-        </button>
-      )}
+        <div className="flex items-center justify-center gap-1.5">
+          {SLIDES.map((slide, i) => (
+            <span
+              key={slide.key}
+              className={`h-1.5 rounded-full bg-dark-surface-foreground transition-all duration-200 ${
+                i === index ? "w-6 opacity-100" : "w-1.5 opacity-40"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -121,9 +128,9 @@ function CapturePreview() {
 }
 
 const STRUCTURE_ITEMS = [
-  { title: "Підготувати презентацію", color: "var(--priority-high)", badge: "Високий пріоритет" },
-  { title: "Подзвонити мамі", color: "var(--priority-medium)", badge: undefined },
-  { title: "Купити продукти", color: "var(--priority-low)", badge: "Низький пріоритет" },
+  { title: "Підготувати презентацію", color: "var(--priority-high)", badge: t.composer.priorityHigh },
+  { title: "Подзвонити мамі", color: "var(--priority-medium)", badge: t.composer.priorityMedium },
+  { title: "Купити продукти", color: "var(--priority-low)", badge: t.composer.priorityLow },
 ] as const;
 
 function StructurePreview() {
