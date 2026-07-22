@@ -146,3 +146,42 @@ export function ArrowMoveIcon({ className }: IconProps) {
     </svg>
   );
 }
+
+export function FocusMarkIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="12" r="7.25" stroke="currentColor" strokeWidth="1.8" />
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function CaptureIcon({ className, filled }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true" focusable="false">
+      <path
+        d="M12 4.5c.6 2.4 1.1 3.4 2.1 4.4 1 1 2 1.5 4.4 2.1-2.4.6-3.4 1.1-4.4 2.1-1 1-1.5 2-2.1 4.4-.6-2.4-1.1-3.4-2.1-4.4-1-1-2-1.5-4.4-2.1 2.4-.6 3.4-1.1 4.4-2.1 1-1 1.5-2 2.1-4.4Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+        fill={filled ? "currentColor" : "none"}
+        fillOpacity={filled ? 0.15 : 0}
+      />
+    </svg>
+  );
+}
+
+export function MicIcon({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true" focusable="false">
+      <rect x="9.25" y="4" width="5.5" height="10" rx="2.75" stroke="currentColor" strokeWidth="1.8" />
+      <path
+        d="M6 11v1a6 6 0 0 0 12 0v-1M12 18v2.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

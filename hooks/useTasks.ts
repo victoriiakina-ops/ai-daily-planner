@@ -4,6 +4,12 @@ import { useCallback, useEffect, useState } from "react";
 import { createId } from "@/lib/id";
 import { getTasks, saveTasks } from "@/lib/storage";
 import { CreateTaskInput, Task, UpdateTaskInput } from "@/lib/types";
+import { ExtractedTaskDraft } from "@/lib/ai/types";
+import { todayIsoDate } from "@/lib/date";
+
+function isToday(date?: string): boolean {
+  return date !== undefined && date === todayIsoDate();
+}
 
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -28,25 +34,67 @@ export function useTasks() {
       id: createId(),
       title: input.title.trim(),
       notes: input.notes?.trim() || undefined,
-      status: "inbox",
+      status: isToday(input.date) ? "today" : "inbox",
+      priority: input.priority ?? "medium",
+      date: input.date,
+      time: input.time,
+      durationMinutes: input.durationMinutes,
+      subtasks: [],
       createdAt: new Date().toISOString(),
     };
     setTasks((prev) => [newTask, ...prev]);
     return newTask;
   }, []);
 
+  /** Batches drafts extracted from a capture session into real tasks in a single update. */
+  const createTasksFromDrafts = useCallback((drafts: ExtractedTaskDraft[]) => {
+    const now = new Date().toISOString();
+    const newTasks: Task[] = drafts.map((draft) => ({
+      id: createId(),
+      title: draft.title.trim(),
+      notes: draft.notes?.trim() || undefined,
+      status: isToday(draft.date) ? "today" : "inbox",
+      priority: draft.priority,
+      date: draft.date,
+      durationMinutes: draft.durationMinutes,
+      subtasks: [],
+      createdAt: now,
+    }));
+    setTasks((prev) => [...newTasks, ...prev]);
+    return newTasks;
+  }, []);
+
   const updateTask = useCallback((id: string, input: UpdateTaskInput) => {
     setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id
-          ? {
-              ...task,
-              title: input.title !== undefined ? input.title.trim() : task.title,
-              notes:
-                input.notes !== undefined ? input.notes.trim() || undefined : task.notes,
-            }
-          : task
-      )
+      prev.map((task) => {
+        if (task.id !== id) return task;
+
+        const dateChanged = input.date !== undefined;
+        const nextDate = dateChanged ? input.date ?? undefined : task.date;
+        // Changing the date implicitly re-buckets the task, unless it's already completed.
+        const nextStatus =
+          dateChanged && task.status !== "completed"
+            ? isToday(nextDate)
+              ? "today"
+              : "inbox"
+            : task.status;
+
+        return {
+          ...task,
+          title: input.title !== undefined ? input.title.trim() : task.title,
+          notes:
+            input.notes !== undefined ? input.notes.trim() || undefined : task.notes,
+          priority: input.priority ?? task.priority,
+          date: nextDate,
+          time: input.time !== undefined ? input.time ?? undefined : task.time,
+          durationMinutes:
+            input.durationMinutes !== undefined
+              ? input.durationMinutes ?? undefined
+              : task.durationMinutes,
+          subtasks: input.subtasks ?? task.subtasks,
+          status: nextStatus,
+        };
+      })
     );
   }, []);
 
@@ -101,6 +149,7 @@ export function useTasks() {
     tasks,
     isLoaded,
     createTask,
+    createTasksFromDrafts,
     updateTask,
     deleteTask,
     moveTask,

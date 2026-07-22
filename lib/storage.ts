@@ -2,6 +2,15 @@ import { Task } from "./types";
 
 const STORAGE_KEY = "planner:tasks";
 
+/** Backfills fields added after a task may have been persisted, so every consumer can treat Task fields as always-present. */
+function normalizeTask(task: Task): Task {
+  return {
+    ...task,
+    priority: task.priority ?? "medium",
+    subtasks: task.subtasks ?? [],
+  };
+}
+
 /** Safely reads the task list from LocalStorage. Returns an empty array on the server or on parse failure. */
 export function getTasks(): Task[] {
   if (typeof window === "undefined") return [];
@@ -11,7 +20,7 @@ export function getTasks(): Task[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return parsed as Task[];
+    return (parsed as Task[]).map(normalizeTask);
   } catch {
     return [];
   }

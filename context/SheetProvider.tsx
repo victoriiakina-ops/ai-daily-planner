@@ -3,28 +3,20 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface SheetContextValue {
-  isAddOpen: boolean;
-  openAddSheet: () => void;
-  closeAddSheet: () => void;
-
-  detailTaskId: string | null;
-  openDetailSheet: (taskId: string) => void;
-  closeDetailSheet: () => void;
+  composerTaskId: string | null;
+  openComposer: (taskId: string) => void;
+  closeComposer: () => void;
 }
 
 const SheetContext = createContext<SheetContextValue | null>(null);
 
 export function SheetProvider({ children }: { children: ReactNode }) {
-  const [isAddOpen, setIsAddOpen] = useState(false);
-  const [detailTaskId, setDetailTaskId] = useState<string | null>(null);
+  const [composerTaskId, setComposerTaskId] = useState<string | null>(null);
 
   const value: SheetContextValue = {
-    isAddOpen,
-    openAddSheet: () => setIsAddOpen(true),
-    closeAddSheet: () => setIsAddOpen(false),
-    detailTaskId,
-    openDetailSheet: (taskId: string) => setDetailTaskId(taskId),
-    closeDetailSheet: () => setDetailTaskId(null),
+    composerTaskId,
+    openComposer: (taskId: string) => setComposerTaskId(taskId),
+    closeComposer: () => setComposerTaskId(null),
   };
 
   return <SheetContext.Provider value={value}>{children}</SheetContext.Provider>;

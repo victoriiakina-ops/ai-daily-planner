@@ -1,22 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
-  --surface: #ffffff;
-  --foreground: #1a1a1a;
-  --muted: #6e6e73;
-  --muted-2: #c7c7cc;
-  --divider: rgba(60, 60, 67, 0.11);
-  --accent: #5b5fe8;
-  --accent-soft: rgba(91, 95, 232, 0.1);
-  --destructive: #d6293a;
-  --destructive-soft: rgba(214, 41, 58, 0.09);
+  /* Focus design system — raw spec tokens (do not add hexes outside this block) */
+  --color-white: #ffffff;
+  --color-offwhite: #f2f2f4;
+  --color-coral: #f49c98;
+  --color-navy: #53708e;
+  --color-green: #93c06d;
+  --color-gray: #5e5e5e;
+  --color-ink: #0a0a0a;
+
+  /* Semantic tokens — light app surfaces */
+  --background: var(--color-offwhite);
+  --surface: var(--color-white);
+  --foreground: var(--color-ink);
+  --muted: var(--color-gray);
+  --muted-2: rgba(94, 94, 94, 0.35);
+  --divider: rgba(10, 10, 10, 0.08);
+  --accent: var(--color-coral);
+  --accent-soft: rgba(244, 156, 152, 0.14);
+  --destructive: var(--color-gray);
+  --destructive-soft: rgba(94, 94, 94, 0.09);
+
+  /* Semantic tokens — dark surfaces (onboarding, nav bar) */
+  --dark-surface: var(--color-navy);
+  --dark-surface-foreground: var(--color-white);
+  --dark-surface-muted: rgba(255, 255, 255, 0.65);
+
+  /* Priority indicators */
+  --priority-high: var(--color-coral);
+  --priority-medium: var(--color-navy);
+  --priority-low: var(--color-green);
 
   --safe-top: env(safe-area-inset-top);
   --safe-bottom: env(safe-area-inset-bottom);
-
-  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
-    Roboto, Helvetica, Arial, sans-serif;
 }
 
 @theme inline {
@@ -30,7 +47,17 @@
   --color-accent-soft: var(--accent-soft);
   --color-destructive: var(--destructive);
   --color-destructive-soft: var(--destructive-soft);
-  --font-sans: var(--font-system);
+
+  --color-dark-surface: var(--dark-surface);
+  --color-dark-surface-foreground: var(--dark-surface-foreground);
+  --color-dark-surface-muted: var(--dark-surface-muted);
+
+  --color-priority-high: var(--priority-high);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-low: var(--priority-low);
+
+  --font-sans: var(--font-onest);
+  --font-display: var(--font-commissioner);
 }
 
 * {
@@ -44,8 +71,53 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-system);
   overscroll-behavior-y: none;
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-step-in {
+  animation: step-in 0.18s ease-out;
+}
+
+@keyframes check-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-check-pop {
+  animation: check-pop 0.28s ease-out;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-card-in {
+  animation: card-in 0.25s ease-out;
 }
 
 button {
