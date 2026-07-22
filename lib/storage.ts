@@ -26,13 +26,26 @@ export function getTasks(): Task[] {
   }
 }
 
-/** Persists the full task list to LocalStorage. No-ops on the server. */
+/**
+ * Persists the full task list to LocalStorage. No-ops on the server.
+ *
+ * A dropped write here is invisible until the next fresh load re-reads the
+ * (stale) previous snapshot, silently reverting whatever change triggered this
+ * save — e.g. a completed task reappearing as incomplete. This can happen from
+ * transient write failures (quota pressure, momentary device I/O issues), so a
+ * single failed attempt retries once before giving up.
+ */
 export function saveTasks(tasks: Task[]): void {
   if (typeof window === "undefined") return;
 
+  const payload = JSON.stringify(tasks);
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    window.localStorage.setItem(STORAGE_KEY, payload);
   } catch {
-    // Storage may be full or unavailable (e.g. private browsing). Fail silently.
+    try {
+      window.localStorage.setItem(STORAGE_KEY, payload);
+    } catch (retryError) {
+      console.error("Failed to persist tasks to LocalStorage (after retry):", retryError);
+    }
   }
 }

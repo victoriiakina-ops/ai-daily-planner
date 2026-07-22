@@ -109,6 +109,8 @@ export function TaskRow({
           type="button"
           onClick={() => onDelete(task)}
           aria-label={t.a11y.deleteTask(task.title)}
+          aria-hidden={!isRevealed}
+          tabIndex={isRevealed ? 0 : -1}
           className="flex w-full items-center justify-center text-white"
         >
           <TrashIcon className="h-5 w-5" />
