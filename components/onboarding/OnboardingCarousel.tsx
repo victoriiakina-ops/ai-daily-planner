@@ -125,10 +125,10 @@ export function OnboardingCarousel() {
 
 function CapturePreview() {
   return (
-    <div className="w-full rounded-[20px] bg-surface p-4 shadow-lg">
-      <div className="flex items-center justify-between gap-3">
+    <div className="h-[190px] w-full rounded-[20px] bg-surface p-4 shadow-lg">
+      <div className="flex h-full flex-col justify-between">
         <span className="text-[14px] text-muted">{t.capture.prompt}</span>
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-dark-surface">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center self-end rounded-full bg-accent text-dark-surface">
           <MicIcon className="h-4 w-4" />
         </span>
       </div>
