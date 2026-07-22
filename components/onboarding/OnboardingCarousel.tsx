@@ -109,7 +109,7 @@ export function OnboardingCarousel() {
 
 function CapturePreview() {
   return (
-    <div className="w-full max-w-[280px] rounded-[20px] bg-surface p-4 shadow-lg">
+    <div className="w-full rounded-[20px] bg-surface p-4 shadow-lg">
       <div className="flex items-center justify-between gap-3">
         <span className="text-[14px] text-muted">{t.capture.prompt}</span>
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-dark-surface">
@@ -128,7 +128,7 @@ const STRUCTURE_ITEMS = [
 
 function StructurePreview() {
   return (
-    <div className="w-full max-w-[280px] overflow-hidden rounded-[20px] bg-surface shadow-lg">
+    <div className="w-full overflow-hidden rounded-[20px] bg-surface shadow-lg">
       {STRUCTURE_ITEMS.map((item, i) => (
         <div
           key={item.title}
@@ -163,7 +163,7 @@ const TODAY_ITEMS = [
 
 function TodayPreview() {
   return (
-    <div className="w-full max-w-[280px] overflow-hidden rounded-[20px] bg-surface shadow-lg">
+    <div className="w-full overflow-hidden rounded-[20px] bg-surface shadow-lg">
       <div className="border-b border-divider px-4 py-3">
         <span className="text-[13px] font-semibold text-foreground">{t.nav.today}</span>
       </div>

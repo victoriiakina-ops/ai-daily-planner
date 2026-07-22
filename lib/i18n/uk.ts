@@ -69,6 +69,7 @@ export const t = {
     removeSubtask: (title: string) => `Видалити "${title}"`,
     addSubtask: "Додати підзадачу",
     voiceInput: "Голосове введення",
+    stopVoiceInput: "Зупинити голосове введення",
     previousMonth: "Попередній місяць",
     nextMonth: "Наступний місяць",
   },
