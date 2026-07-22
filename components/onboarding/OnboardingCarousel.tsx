@@ -69,8 +69,13 @@ export function OnboardingCarousel() {
 
       {/* The card+text group is vertically centered in the space between the header
           and the bottom controls, so it feels balanced regardless of card height —
-          rather than anchored to a fixed offset from the top. */}
-      <div className="flex flex-1 flex-col items-center justify-center">
+          rather than anchored to a fixed offset from the top. A fixed upward
+          translate (not a margin) shifts the whole group as one unit, the same
+          amount on every slide, without disturbing the bottom controls below it. */}
+      <div
+        className="flex flex-1 flex-col items-center justify-center"
+        style={{ transform: "translateY(-48px)" }}
+      >
         {/* Fixed-height, bottom-aligned box: every card's bottom edge (and so its
             gap to the heading) lands in the same place, so the gap stays small and
             consistent even though the three preview cards are very different heights
