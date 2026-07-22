@@ -12,7 +12,9 @@ export default function RootPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(hasCompletedOnboarding() ? "/capture" : "/onboarding");
+    // TEMPORARY — DEMO ONLY: always show onboarding, ignoring the completed flag.
+    // Revert to: router.replace(hasCompletedOnboarding() ? "/capture" : "/onboarding");
+    router.replace("/onboarding");
   }, [router]);
 
   return null;
