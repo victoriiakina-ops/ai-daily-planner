@@ -12,7 +12,12 @@ export default function RootPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(hasCompletedOnboarding() ? "/capture" : "/onboarding");
+    // TEMPORARY (presentation recording): always show onboarding, ignoring the
+    // completed flag. MUST be reverted to
+    //   router.replace(hasCompletedOnboarding() ? "/capture" : "/onboarding");
+    // right after the presentation.
+    void hasCompletedOnboarding;
+    router.replace("/onboarding");
   }, [router]);
 
   return null;
