@@ -24,7 +24,9 @@ export default function InboxPage() {
   const { openComposer } = useSheetContext();
   const [filter, setFilter] = useState<Filter>("all");
 
-  const inboxTasks = tasks.filter((task) => task.status === "inbox");
+  // The `!task.completedAt` check is a second, independent guard beyond the status
+  // check: a task that has ever been completed must never render here again.
+  const inboxTasks = tasks.filter((task) => task.status === "inbox" && !task.completedAt);
   const visibleTasks =
     filter === "all" ? inboxTasks : inboxTasks.filter((task) => task.priority === filter);
 

@@ -20,8 +20,10 @@ export default function TodayPage() {
   const { tasks, completeTask, uncompleteTask, deleteTask } = useTasksContext();
   const { openComposer } = useSheetContext();
 
+  // The `!task.completedAt` check is a second, independent guard beyond the status
+  // check: a task that has ever been completed must never render here again.
   const todayTasks = tasks
-    .filter((task) => task.status === "today")
+    .filter((task) => task.status === "today" && !task.completedAt)
     .sort((a, b) => (a.time ?? "").localeCompare(b.time ?? ""));
   const priorityTasks = todayTasks.filter((task) => task.priority === "high");
   const totalMinutes = todayTasks.reduce((sum, task) => sum + (task.durationMinutes ?? 0), 0);

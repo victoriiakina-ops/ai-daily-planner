@@ -2,12 +2,18 @@ import { Task } from "./types";
 
 const STORAGE_KEY = "planner:tasks";
 
-/** Backfills fields added after a task may have been persisted, so every consumer can treat Task fields as always-present. */
+/**
+ * Backfills fields added after a task may have been persisted, so every consumer can
+ * treat Task fields as always-present. Also re-asserts that a task which has ever been
+ * completed (`completedAt` set) reports status "completed" — a defensive invariant so a
+ * task can never render as active again once it has a completion timestamp.
+ */
 function normalizeTask(task: Task): Task {
   return {
     ...task,
     priority: task.priority ?? "medium",
     subtasks: task.subtasks ?? [],
+    status: task.completedAt ? "completed" : task.status,
   };
 }
 

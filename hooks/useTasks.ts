@@ -33,10 +33,18 @@ export function useTasks() {
    * next load reads the stale pre-mutation snapshot. Persisting inside the updater
    * itself (which React invokes synchronously while processing the state update)
    * closes that window entirely.
+   *
+   * Also re-asserts the same completedAt/status invariant as `normalizeTask` right
+   * before persisting, so no mutator can leave a completed task's status out of sync.
    */
   const mutate = useCallback((updater: (prev: Task[]) => Task[]) => {
     setTasks((prev) => {
-      const next = updater(prev);
+      const updated = updater(prev);
+      const next = updated.map((task) =>
+        task.completedAt && task.status !== "completed"
+          ? { ...task, status: "completed" as const }
+          : task
+      );
       saveTasks(next);
       return next;
     });
